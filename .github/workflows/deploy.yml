@@ -211,26 +211,11 @@ jobs:
 
       - name: Make gradlew executable
         if: ${{ needs.detect-project-type.outputs.project-type == 'android' }}
-        run: chmod +x ./gradlew
+        run: chmod +x android/gradlew
 
       - name: Build Debug APK
         if: ${{ needs.detect-project-type.outputs.project-type == 'android' }}
-        run: |
-          if [ -f "./gradlew" ]; then
-            ./gradlew assembleDebug
-          elif [ -f "build.gradle" ] || [ -f "build.gradle.kts" ]; then
-            gradle assembleDebug
-          else
-            echo "Could not find Gradle wrapper or build.gradle file"
-            exit 1
-          fi
-
-      - name: Build React Native Android APK
-        if: ${{ needs.detect-project-type.outputs.project-type == 'android' && contains(needs.detect-project-type.outputs.project-type, 'react-native') }}
-        run: |
-          npm ci
-          npx react-native run-android --variant=debug
-          # For React Native, the APK will be in android/app/build/outputs/apk/debug/
+        run: cd android && ./gradlew assembleDebug
 
       - name: Find APK file
         id: apk-path
