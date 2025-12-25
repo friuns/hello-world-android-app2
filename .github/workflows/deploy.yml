@@ -211,7 +211,7 @@ jobs:
 
       - name: Make gradlew executable
         if: ${{ needs.detect-project-type.outputs.project-type == 'android' }}
-        run: chmod +x ./gradlew
+        run: if [ -f ./gradlew ]; then chmod +x ./gradlew; fi
 
       - name: Build Debug APK
         if: ${{ needs.detect-project-type.outputs.project-type == 'android' }}
