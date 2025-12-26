@@ -56,9 +56,17 @@ jobs:
             echo "is-web=false" >> $GITHUB_OUTPUT
             echo "Could not detect project type"
           fi
+
+  test-firewall:
+    needs: detect-project-type
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test firewall
+        run: curl -v https://www.google.com
+
   # GitHub Pages deployment (only on main branch push, web apps only)
   build-and-deploy-pages:
-    needs: detect-project-type
+    needs: [detect-project-type, test-firewall]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.detect-project-type.outputs.is-web == 'true'
     runs-on: ubuntu-latest
     environment:
@@ -92,7 +100,7 @@ jobs:
 
   # Netlify deployment (only on pull requests, web apps only)
   deploy-netlify:
-    needs: detect-project-type
+    needs: [detect-project-type, test-firewall]
     if: github.event_name == 'pull_request' && needs.detect-project-type.outputs.is-web == 'true'
     runs-on: ubuntu-latest
 
@@ -183,7 +191,7 @@ jobs:
 
   # Android APK build and release
   build-android-apk:
-    needs: detect-project-type
+    needs: [detect-project-type, test-firewall]
     if: needs.detect-project-type.outputs.is-android == 'true'
     runs-on: ubuntu-latest
     steps:

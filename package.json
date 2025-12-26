@@ -1,0 +1,12 @@
+{
+  "name": "test-firewall-early",
+  "version": "1.0.0",
+  "description": "A simple web app to test firewall settings.",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'Building...' && mkdir -p dist && cp src/index.html dist/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
